@@ -15,7 +15,7 @@ switch -regex ($cert.Extension.ToUpper()) {
     }
     ".PFX" {
         $pfx = new-object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
-        $pfx.import("<%= @location %>\\<%= @name %>","<%= @password %>","Exportable,PersistKeySet")
+        $pfx.import("<%= @location %>\\<%= @name %>","<%= @password %>","Exportable,PersistKeySet,MachineKeySet")
     }
 }
 
