@@ -49,7 +49,7 @@
 #    thumbprint => '07E5C1AF7F5223CB975CC29B5455642F5570798B'
 #  }
 #
-define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMachine', $store_dir = 'My') {
+define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMachine', $store_dir = 'My', $mode=undef, $owner=undef, $group=undef) {
   validate_re($name, '^(.)+$',"Must pass name to ${module_name}[${title}]")
   validate_re($location, '^(.)+$',"Must pass location to ${module_name}[${title}]")
   validate_re($thumbprint, '^(.)+$', "Must pass a certificate thumbprint to ${module_name}[${title}]")
@@ -61,6 +61,9 @@ define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMac
     path    => "C:\\temp\\inspect-${name}.ps1",
     content => template('sslcertificate/inspect.ps1.erb'),
     require => File['C:\temp'],
+    mode => $mode,
+    owner => $owner,
+    group => $group,
   }
 
   file { "import-${name}-certificate.ps1" :
@@ -68,6 +71,9 @@ define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMac
     path    => "C:\\temp\\import-${name}.ps1",
     content => template('sslcertificate/import.ps1.erb'),
     require => File['C:\temp'],
+    mode => $mode,
+    owner => $owner,
+    group => $group,
   }
 
   exec { "Install-${name}-SSLCert":
